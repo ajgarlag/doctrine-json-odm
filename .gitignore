@@ -3,3 +3,5 @@
 /phpunit.xml
 /tests/Fixtures/cache
 /tests/Fixtures/logs
+/var/cache
+/var/logs

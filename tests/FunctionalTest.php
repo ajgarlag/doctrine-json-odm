@@ -9,6 +9,7 @@
 
 namespace Dunglas\DoctrineJsonOdm\tests;
 
+use Doctrine\DBAL\Exception\ConnectionException;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attribute;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Attributes;
 use Dunglas\DoctrineJsonOdm\Tests\Fixtures\TestBundle\Entity\Bar;
@@ -36,6 +37,13 @@ class FunctionalTest extends KernelTestCase
 
         $this->application = new Application(self::$kernel);
         $this->application->setAutoExit(false);
+
+        $connection = self::$kernel->getContainer()->get('database_connection');
+        try {
+            $connection->connect();
+        } catch (ConnectionException $e) {
+            $this->markTestSkipped();
+        }
 
         $this->runCommand('doctrine:schema:drop --force');
         $this->runCommand('doctrine:schema:create');
